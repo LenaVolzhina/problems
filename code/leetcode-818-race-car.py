@@ -1,5 +1,5 @@
 """
-https://leetcode.com/problems/race-car/description/
+[Hard] https://leetcode.com/problems/race-car/description/
 Description
 Your car starts at position 0 and speed +1 on an infinite number line.
 (Your car can go into negative positions.)

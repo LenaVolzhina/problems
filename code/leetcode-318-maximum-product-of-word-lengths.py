@@ -1,5 +1,5 @@
 """
-https://leetcode.com/problems/maximum-product-of-word-lengths/description/
+[Medium] https://leetcode.com/problems/maximum-product-of-word-lengths/description/
 Description
 Given a string array words, find the maximum value of length(word[i]) * length(word[j])
 where the two words do not share common letters. You may assume that each word will contain
