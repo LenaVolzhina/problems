@@ -15,27 +15,33 @@ For example, after commands "AAR", your car goes to positions 0->1->3->3, and yo
 
 Now for some target position, say the length of the shortest sequence of instructions to get there.
 """
+from collections import deque
 
 
 class Solution:
-    def __init__(self):
-        # stack will contain tuples (cur_length, cur_target, cur_speed)
-        self.stack = []
-
-    def bfs(self):
-        while True:
-            cur_length, cur_target, cur_speed = self.stack.pop(0)
-            if cur_target == 0:
-                return cur_length
-            # A:
-            self.stack.append((cur_length + 1, cur_target - cur_speed, cur_speed * 2))
-            # R:
-            self.stack.append((cur_length + 1, cur_target, -1 if cur_speed > 0 else 1))
-
     def racecar(self, target):
         """
         :type target: int
         :rtype: int
         """
-        self.stack.append((0, target, 1))
-        return self.bfs()
+        # [(cur_length, cur_pos, cur_speed)]
+        stack = deque([(0, 0, 1)])
+        # [(cur_pos, cur_speed)]
+        visited = {(0, 1)}
+        while True:
+            cur_length, cur_pos, cur_speed = stack.popleft()
+            if cur_pos == target:
+                return cur_length
+            moves = (
+                # A:
+                (cur_pos + cur_speed, cur_speed * 2),
+                # R:
+                (cur_pos, -1 if cur_speed > 0 else 1)
+            )
+            for new_pos, new_speed in moves:
+                if new_pos == target:
+                    return cur_length + 1
+                if (new_pos, new_speed) not in visited and new_pos < 2 * target:
+                    # prune visited conditions and too big positions
+                    stack.append((cur_length + 1, new_pos, new_speed))
+                    visited.add((new_pos, new_speed))
