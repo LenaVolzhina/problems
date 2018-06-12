@@ -18,36 +18,24 @@ Now for some target position, say the length of the shortest sequence of instruc
 
 
 class Solution:
+    def __init__(self):
+        # stack will contain tuples (cur_length, cur_target, cur_speed)
+        self.stack = []
+
+    def bfs(self):
+        while True:
+            cur_length, cur_target, cur_speed = self.stack.pop(0)
+            if cur_target == 0:
+                return cur_length
+            # A:
+            self.stack.append((cur_length + 1, cur_target - cur_speed, cur_speed * 2))
+            # R:
+            self.stack.append((cur_length + 1, cur_target, -1 if cur_speed > 0 else 1))
+
     def racecar(self, target):
         """
         :type target: int
         :rtype: int
         """
-        if target == 0:
-            return 0
-        if target < 0:
-            print("R", end=' ')
-            return 1 + self.racecar(-target)
-
-        # find closest 2 ^ n
-        left, left_n = 1, 0
-        while left * 2 - 1 < target:
-            left *= 2
-            left_n += 1
-        right = left * 2 - 1
-        left = left - 1
-        # now left = 2 ^ n - 1 <= target < 2 ^ (n + 1) - 1
-        print("({}, {}, {})".format(left, target, right), end=' ')
-        if target == left:
-            print("A{}".format(left_n), end=' ')
-            return left_n
-        elif target == right:
-            print("A{}".format(left_n + 1), end=' ')
-            return left_n + 1
-        if target - left < right - target:
-            # 2 ^ n is closer
-            print("A{}RR".format(left_n), end=' ')
-            return left_n + 2 + self.racecar(target - left)
-        else:
-            print("A{}R".format(left_n + 1), end=' ')
-            return left_n + 2 + self.racecar(right - target)
+        self.stack.append((0, target, 1))
+        return self.bfs()
